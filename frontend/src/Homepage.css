@@ -1,0 +1,158 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f1f1f1;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color:#012464;
+    color: #fff;
+  }
+  
+  .navbar-left h2 {
+    margin: 0;
+  }
+  
+  .navbar-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-icon {
+    width: 30px;
+    height: 30px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .container {
+    
+    height: 100vh;
+    margin:  auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-student-button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup-content {
+    width: 300px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    
+
+  }
+  
+  .popup h2 {
+    margin: 0 0 20px 0;
+  }
+  
+  .popup-content .form-group {
+    margin: 20px;
+    margin-left: 10px;
+  }
+  
+  .popup-content label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .popup-content input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  .popup-content select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .popup-content button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .student-list {
+    margin-top: 20px;
+    display: flex;
+  flex-direction: row; /* Added */
+  justify-content: flex-start;
+  align-items: flex-start; /* Updated */
+  }
+  
+  .student-card {
+    padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  width: fit-content;
+  margin: 35px;
+  display: flex;
+  flex-direction: column; /* Added */
+  justify-content: center;
+  align-items: flex-start; /* Updated */
+  }
+  
+  .student-details p {
+    margin: 0;
+    margin-bottom: 10px;
+  }
+  .student-actions {
+    display: flex;
+    justify-content: flex-end; /* Updated */
+    align-items: center; /* Updated */
+  }
+  
+  
+  .student-actions button {
+    padding: 5px 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 5px; /* Updated */
+  }
+  
+  .student-actions button:last-child {
+    margin-right: 0;
+  }
+  .student-actions button:first-child {
+    margin-left: 0; /* Updated */
+  }
+  
