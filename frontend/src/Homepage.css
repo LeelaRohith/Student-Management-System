@@ -6,6 +6,7 @@ body {
   
   .navbar {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
@@ -36,7 +37,7 @@ body {
     margin:  auto;
     padding: 20px;
     background-color: #fff;
-    border-radius: 5px;
+   
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
@@ -156,3 +157,54 @@ body {
     margin-left: 0; /* Updated */
   }
   
+  @media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+    }
+  
+    .navbar-left {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    .navbar-left h2 {
+      font-size: 1.2em; /* Smaller text size */
+      margin-left: 10px;
+    }
+  
+    .user-icon {
+      width: 15px; /* Smaller icon size */
+      height: 15px;
+    }
+  
+    .container {
+      width: 90%; /* Adjust width for mobile screens */
+      height: 100vh;
+      padding: 18px;
+      
+    }
+  
+    .student-list {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .student-card {
+      width: 100%; /* Full width in mobile view */
+      padding: 12px;
+      margin: 5px;
+    }
+  
+    .popup-content {
+      width: 90%; /* Adjust width of popups for mobile screens */
+    }
+    h2 
+    {
+      font-size: medium;
+      text-align: center;
+    }
+  }

@@ -3,9 +3,10 @@ import "./Homepage.css"; // Import the CSS file for styling
 import icon from "./icon.png";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import { TailSpin } from "react-loader-spinner";
 const Homepage = () => {
   const [editStudent, setEditStudent] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   const [showAddStudentPopup, setShowAddStudentPopup] = useState(false);
   const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -29,15 +30,16 @@ const Homepage = () => {
   };
   const fetchData = async () => {
     const res = await axios.get(
-      "http://localhost:8080/api/v1/faculty/currentuser",
+      `${process.env.React_App_Backend_Url}/api/v1/faculty/currentuser`,
       { headers }
     );
 
-    //console.log(response.data);
+    //(response.data);
     setCurrrentuseremail(res.data.email);
     setCurrrentuserid(res.data.id);
     const studentsResponse = await axios.get(
-      "http://localhost:8080/api/v1/faculty/currentuserstudents/" + res.data.id,
+      `${process.env.React_App_Backend_Url}/api/v1/faculty/currentuserstudents/` +
+        res.data.id,
       {
         headers,
       }
@@ -46,32 +48,31 @@ const Homepage = () => {
   };
   useEffect(() => {
     fetchData();
-  }, [students]);
-  //console.log(currentuser);
+  });
 
   const handleFormSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
-    // Handle form submission here (e.g., send data to server or perform validation)
-    // You can access the form values using the newStudent state variable
-    // Add your logic here
 
     // Add the new student to the list of students
     // Reset the form fields
     axios
       .post(
-        "http://localhost:8080/api/v1/addstudent/" + currentUserId,
+        `${process.env.React_App_Backend_Url}/api/v1/addstudent/` +
+          currentUserId,
         newStudent,
         { headers }
       )
       .then(function (response) {
-        //console.log(response.data);
+        //(response.data);
+        setLoading(false);
         enqueueSnackbar(response.data.text, {
           variant: "success",
           autoHideDuration: 5000,
         });
       })
       .catch(function (err) {
-        console.log(err.data);
+        setLoading(false);
       });
     setNewStudent({
       name: "",
@@ -94,20 +95,19 @@ const Homepage = () => {
     // Reset the form fields
     axios
       .put(
-        "http://localhost:8080/api/v1/editstudent/" + currentUserId,
+        `${process.env.React_App_Backend_Url}/api/v1/editstudent/` +
+          currentUserId,
         editStudent,
         { headers }
       )
       .then(function (response) {
-        //console.log(response.data);
+        //(response.data);
         enqueueSnackbar(response.data.text, {
           variant: "success",
           autoHideDuration: 5000,
         });
       })
-      .catch(function (err) {
-        console.log(err.data);
-      });
+      .catch(function (err) {});
     setEditStudent({
       name: "",
       rollNumber: "",
@@ -125,10 +125,10 @@ const Homepage = () => {
   };
 
   const handleDeleteStudent = (student) => {
-    console.log(student);
     axios
       .post(
-        "http://localhost:8080/api/v1/deletestudent/" + currentUserId,
+        `${process.env.React_App_Backend_Url}/api/v1/deletestudent/` +
+          currentUserId,
         {
           name: student.name,
           rollNumber: student.rollNumber,
@@ -142,15 +142,12 @@ const Homepage = () => {
         }
       )
       .then(function (response) {
-        console.log(response.data);
         enqueueSnackbar(response.data.text, {
           variant: "success",
           autoHideDuration: 5000,
         });
       })
-      .catch(function (err) {
-        console.log(err.data);
-      });
+      .catch(function (err) {});
   };
   const handleEditStudent = (student) => {
     setSelectedEditStudent(student);
@@ -170,12 +167,9 @@ const Homepage = () => {
         <div className="navbar-left">
           <h2>Student Management System</h2>
         </div>
+        <br></br>
         <div className="navbar-right">
-          <img
-            src={icon}
-            alt="User icon"
-            style={{ width: "35px", height: "35px", marginRight: "20px" }}
-          ></img>
+          <img className="user-icon" src={icon} alt="User icon"></img>
           <span>{currentUserEmail}</span>
         </div>
       </nav>
@@ -277,8 +271,39 @@ const Homepage = () => {
                   required
                 />
               </div>
-              <div style={{ textAlign: "center" }}>
-                <button type="submit">Submit</button>
+              <div
+                style={{
+                  textAlign: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <button
+                  type="submit"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "10px 20px", // Adjust padding as needed
+                    // Add any other styles you need for the button
+                  }}
+                >
+                  {loading ? (
+                    <TailSpin
+                      visible={loading}
+                      height="20"
+                      width="20"
+                      color="white"
+                      ariaLabel="tail-spin-loading"
+                      radius="2"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                    />
+                  ) : (
+                    "Submit"
+                  )}
+                </button>
               </div>
             </form>
           </div>
@@ -296,7 +321,15 @@ const Homepage = () => {
                 <p>Semester: {selectedStudent.semester}</p>
                 <p>Phone Number: {selectedStudent.phoneNumber}</p>
               </div>
-              <button onClick={() => setSelectedStudent(null)}>Close</button>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <button onClick={() => setSelectedStudent(null)}>Close</button>
+              </div>
             </div>
           </div>
         )}

@@ -4,7 +4,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import logo from "./logo.png";
+import { TailSpin } from "react-loader-spinner";
 const Register = () => {
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,12 +15,14 @@ const Register = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const handleSubmit = (e) => {
+    //console.log(`${process.env.React_App_Backend_Url}`);
+    setLoading(true);
     e.preventDefault();
     // Handle form submission here (e.g., send data to server or perform validation)
     // You can access the form values using the respective state variables (name, email, password, department, phoneNumber)
     // Add your logic here
     axios
-      .post("http://localhost:8080/api/v1/auth/register", {
+      .post(`${process.env.React_App_Backend_Url}/api/v1/auth/register`, {
         name: name,
         email: email,
         password: password,
@@ -26,33 +30,25 @@ const Register = () => {
         phoneno: phoneno,
       })
       .then(function (response) {
-        console.log(response.data);
         enqueueSnackbar(response.data.token, {
           variant: "success",
           autoHideDuration: 1000,
         });
-        navigate("/login");
+        navigate("/");
       })
       .catch(function (err) {
-        console.log(err.data);
+        setLoading(false);
       });
   };
 
   return (
     <div className="body">
-      <div
-        style={{
-          marginLeft: "100px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <div className="logo-heading-container">
         <img
           src={logo}
           alt="User icon"
-          style={{ width: "200px", height: "200px", marginRight: "20px" }}
+          className="logo"
+          style={{ marginRight: "20px" }}
         ></img>
         <h1 style={{ color: "white" }}>Student Management System</h1>
       </div>
@@ -121,7 +117,31 @@ const Register = () => {
               required
             />
           </div>
-          <button type="submit">Register</button>
+          <button
+            type="submit"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "10px 20px", // Adjust padding as needed
+              // Add any other styles you need for the button
+            }}
+          >
+            {loading ? (
+              <TailSpin
+                visible={loading}
+                height="20"
+                width="20"
+                color="white"
+                ariaLabel="tail-spin-loading"
+                radius="2"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+            ) : (
+              "Register"
+            )}
+          </button>
         </form>
       </div>
     </div>

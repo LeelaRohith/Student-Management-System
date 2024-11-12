@@ -3,25 +3,26 @@ import "./Register.css"; // Import the CSS file for styling
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import logo from "./logo.png";
+import { TailSpin } from "react-loader-spinner";
 const Forgotpassword = () => {
+  const [loading, setLoading] = useState(false);
+  const [loading1, setLoading1] = useState(false);
   const [email, setEmail] = useState("");
   const [sentotp, setSentotp] = useState(false);
   const [otp, setOtp] = useState("");
   const [msg, setMsg] = useState("");
-  const [otpresponse, setOtpresponse] = useState({
-    text: " ",
-    otpAuthentication: " ",
-  });
+  // const [otpresponse, setOtpresponse] = useState({
+  //   text: " ",
+  //   otpAuthentication: " ",
+  // });
   const navigate = useNavigate();
   //const { enqueueSnackbar } = useSnackbar();
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
-    // Handle form submission here (e.g., send data to server or perform validation)
-    // You can access the form values using the respective state variables (name, email, password, department, phoneNumber)
-    // Add your logic here
     axios
       .post(
-        "http://localhost:8080/api/v1/auth/resetpassword",
+        `${process.env.React_App_Backend_Url}/api/v1/auth/resetpassword`,
         {
           email: email,
         },
@@ -32,27 +33,20 @@ const Forgotpassword = () => {
         }
       )
       .then(function (response) {
-        console.log("response");
-        // console.log(email);
-        // enqueueSnackbar(response.data.token, {
-        //   variant: "success",
-        //   autoHideDuration: 1000,
-        // });
+        setLoading(false);
         setMsg(response.data.text);
         setSentotp(response.data.userExists);
       })
       .catch(function (err) {
-        console.log(err.data);
+        setLoading(false);
       });
   };
   const handleSubmit1 = (e) => {
+    setLoading1(true);
     e.preventDefault();
-    // Handle form submission here (e.g., send data to server or perform validation)
-    // You can access the form values using the respective state variables (name, email, password, department, phoneNumber)
-    // Add your logic here
     axios
       .post(
-        "http://localhost:8080/api/v1/auth/validateotp",
+        `${process.env.React_App_Backend_Url}/api/v1/auth/validateotp`,
         {
           otp: otp,
         },
@@ -63,36 +57,23 @@ const Forgotpassword = () => {
         }
       )
       .then(function (response) {
-        // enqueueSnackbar(response.data.token, {
-        //   variant: "success",
-        //   autoHideDuration: 1000,
-        // });
-        console.log(response.data);
-
-        setOtpresponse(response.data);
         if (response.data.otpAuthentication) {
           navigate("/updatepassword");
         }
+        setLoading1(false);
       })
       .catch(function (err) {
-        console.log(err.data);
+        setLoading1(false);
       });
   };
   return (
     <div className="body">
-      <div
-        style={{
-          marginLeft: "100px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <div className="logo-heading-container">
         <img
+          className="logo"
           src={logo}
           alt="User icon"
-          style={{ width: "200px", height: "200px", marginRight: "20px" }}
+          style={{ marginRight: "20px" }}
         ></img>
         <h1 style={{ color: "white" }}>Student Management System</h1>
       </div>
@@ -112,7 +93,31 @@ const Forgotpassword = () => {
           <div>
             <p style={{ textAlign: "center" }}>{msg}</p>
           </div>
-          <button type="submit">Send OTP</button>
+          <button
+            type="submit"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "10px 20px", // Adjust padding as needed
+              // Add any other styles you need for the button
+            }}
+          >
+            {loading ? (
+              <TailSpin
+                visible={loading}
+                height="20"
+                width="20"
+                color="white"
+                ariaLabel="tail-spin-loading"
+                radius="2"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+            ) : (
+              "SEND OTP"
+            )}
+          </button>
         </form>
         {sentotp ? (
           <form onSubmit={handleSubmit1}>
@@ -126,7 +131,31 @@ const Forgotpassword = () => {
                 required
               />
             </div>
-            <button type="submit">Reset Password</button>
+            <button
+              type="submit"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "10px 20px", // Adjust padding as needed
+                // Add any other styles you need for the button
+              }}
+            >
+              {loading1 ? (
+                <TailSpin
+                  visible={loading1}
+                  height="20"
+                  width="20"
+                  color="white"
+                  ariaLabel="tail-spin-loading"
+                  radius="2"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                />
+              ) : (
+                "RESET PASSWORD"
+              )}
+            </button>
           </form>
         ) : null}
       </div>

@@ -4,23 +4,25 @@ import axios from "axios";
 import logo from "./logo.png";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import { TailSpin } from "react-loader-spinner";
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
     // Handle form submission here (e.g., send data to server or perform validation)
     // You can access the form values using the respective state variables (name, email, password, department, phoneNumber)
     // Add your logic here
     axios
-      .post("http://localhost:8080/api/v1/auth/authenticate", {
+      .post(`${process.env.React_App_Backend_Url}/api/v1/auth/authenticate`, {
         email: email,
         password: password,
       })
       .then(function (response) {
-        console.log(response.data.token);
         localStorage.setItem("token", response.data.token);
         enqueueSnackbar("Login Success", {
           variant: "success",
@@ -29,7 +31,8 @@ const Login = () => {
         navigate("/homepage");
       })
       .catch(function (err) {
-        console.log(err.data);
+        setLoading(false);
+
         enqueueSnackbar("Invalid Credentials", {
           variant: "error",
           autoHideDuration: 1000,
@@ -39,23 +42,18 @@ const Login = () => {
 
   return (
     <div className="body">
-      <div
-        style={{
-          marginLeft: "100px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <div className="logo-heading-container">
         <img
+          className="logo"
           src={logo}
           alt="User icon"
-          style={{ width: "200px", height: "200px", marginRight: "20px" }}
+          style={{ marginRight: "20px" }}
         ></img>
-        <h1 style={{ color: "white" }}>Student Management System</h1>
+        <h1 style={{ color: "white" }}>
+          Student Management <br></br>System
+        </h1>
       </div>
-      <div className="register-container">
+      <div className="login-container">
         <h2>Faculty Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -78,17 +76,38 @@ const Login = () => {
               required
             />
           </div>
-
-          <a
-            // onClick={() => {
-            //   navigate("/forgotpassword");
-            // }}
-            href="/forgotpassword"
-          >
-            Forgot password
+          <a href="/register">
+            Don't have an account ?<br></br>Click Here to Register
           </a>
           <br></br>
-          <button type="submit">Login</button>
+          <a href="/forgotpassword">Forgot password</a>
+          <br></br>
+          <button
+            type="submit"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "10px 20px",
+            }}
+          >
+            {loading ? (
+              <div>
+                <TailSpin
+                  visible={loading}
+                  height="20"
+                  width="20"
+                  color="white"
+                  ariaLabel="tail-spin-loading"
+                  radius="2"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                />
+              </div>
+            ) : (
+              "Login"
+            )}
+          </button>
         </form>
       </div>
     </div>
