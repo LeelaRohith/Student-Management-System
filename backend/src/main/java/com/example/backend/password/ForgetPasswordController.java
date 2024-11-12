@@ -60,7 +60,7 @@ public class ForgetPasswordController {
                 + "<p>Ignore this email if you do remember your password, "
                 + "or you have not made the request.</p>";
         emailService.sendEmail(resetEmail.getEmail(),"Password Reset",emailBody);
-        return ResponseEntity.ok(passwordResponse.builder().text("We have sent otp to your email. Please check.").userExists(true).build());
+        return ResponseEntity.ok(passwordResponse.builder().text("OTP has been sent to your mail").userExists(true).build());
     }
     @PostMapping("/validateotp")
     public ResponseEntity<Validateresponse> validateotp(@RequestBody Otp otp)
